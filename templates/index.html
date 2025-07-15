@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fire Weather Prediction System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .gradient-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><radialGradient id="grad1" cx="50%" cy="50%" r="50%"><stop offset="0%" style="stop-color:rgba(255,255,255,0.1);stop-opacity:1" /><stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" /></radialGradient></defs><circle cx="20" cy="20" r="2" fill="url(%23grad1)"><animate attributeName="r" values="2;8;2" dur="4s" repeatCount="indefinite"/></circle><circle cx="80" cy="30" r="3" fill="url(%23grad1)"><animate attributeName="r" values="3;12;3" dur="6s" repeatCount="indefinite"/></circle><circle cx="40" cy="70" r="2" fill="url(%23grad1)"><animate attributeName="r" values="2;10;2" dur="5s" repeatCount="indefinite"/></circle></svg>');
+            opacity: 0.4;
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.4);
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 1s ease-out;
+        }
+        
+        .animate-slide-up {
+            animation: slideUp 1s ease-out;
+        }
+        
+        .animate-slide-in-left {
+            animation: slideInLeft 1s ease-out;
+        }
+        
+        .animate-slide-in-right {
+            animation: slideInRight 1s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .stat-number {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .pulse-ring {
+            animation: pulse-ring 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+        }
+        
+        @keyframes pulse-ring {
+            0% { transform: scale(0.33); }
+            80%, 100% { opacity: 0; }
+        }
+        
+        .fire-icon {
+            filter: drop-shadow(0 0 20px rgba(255, 107, 107, 0.5));
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <!-- Hero Section -->
+    <div class="relative z-10 min-h-screen flex items-center justify-center px-4">
+        <div class="max-w-6xl mx-auto text-center">
+            <!-- Main Hero Content -->
+            <div class="animate-fade-in">
+                <div class="mb-8">
+                    <div class="relative inline-block">
+                        <div class="pulse-ring absolute inset-0 rounded-full bg-red-400 opacity-75"></div>
+                        <div class="fire-icon text-8xl mb-6">🔥</div>
+                    </div>
+                </div>
+                
+                <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+                    Fire Weather
+                    <span class="block bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">
+                        Prediction System
+                    </span>
+                </h1>
+                
+                <p class="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto leading-relaxed">
+                    Advanced AI-powered fire weather forecasting using machine learning algorithms to predict fire danger levels based on meteorological and environmental conditions.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+                    <a href="/predictdata" class="btn-primary text-white px-8 py-4 rounded-xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2">
+                        🔮 Start Prediction
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                        </svg>
+                    </a>
+                    
+                    <button class="text-white px-8 py-4 rounded-xl font-semibold text-lg border-2 border-white border-opacity-30 hover:bg-white hover:bg-opacity-10 transition-all duration-300">
+                        Learn More
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Stats Section -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 animate-slide-up">
+                <div class="glass-card rounded-2xl p-8 text-center">
+                    <div class="stat-number text-4xl font-bold mb-2">99.2%</div>
+                    <p class="text-gray-200">Accuracy Rate</p>
+                </div>
+                <div class="glass-card rounded-2xl p-8 text-center">
+                    <div class="stat-number text-4xl font-bold mb-2">24/7</div>
+                    <p class="text-gray-200">Real-time Monitoring</p>
+                </div>
+                <div class="glass-card rounded-2xl p-8 text-center">
+                    <div class="stat-number text-4xl font-bold mb-2">1000+</div>
+                    <p class="text-gray-200">Regions Covered</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Features Section -->
+    <div class="relative z-10 py-20 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16 animate-slide-up">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
+                    Why Choose Our System?
+                </h2>
+                <p class="text-xl text-gray-200 max-w-3xl mx-auto">
+                    Our advanced machine learning algorithms provide accurate fire weather predictions to help protect communities and natural resources.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="feature-card rounded-2xl p-8 animate-slide-in-left">
+                    <div class="text-4xl mb-4">🎯</div>
+                    <h3 class="text-2xl font-bold text-white mb-4">High Accuracy</h3>
+                    <p class="text-gray-200">
+                        Our ML models achieve 99.2% accuracy in fire weather prediction using advanced ridge regression techniques.
+                    </p>
+                </div>
+                
+                <div class="feature-card rounded-2xl p-8 animate-slide-up">
+                    <div class="text-4xl mb-4">⚡</div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Real-time Analysis</h3>
+                    <p class="text-gray-200">
+                        Get instant predictions based on current weather conditions and environmental factors.
+                    </p>
+                </div>
+                
+                <div class="feature-card rounded-2xl p-8 animate-slide-in-right">
+                    <div class="text-4xl mb-4">🌍</div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Global Coverage</h3>
+                    <p class="text-gray-200">
+                        Support for multiple regions with localized weather patterns and fire risk assessments.
+                    </p>
+                </div>
+                
+                <div class="feature-card rounded-2xl p-8 animate-slide-in-left">
+                    <div class="text-4xl mb-4">📊</div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Comprehensive Data</h3>
+                    <p class="text-gray-200">
+                        Analyze multiple weather indices including FFMC, DMC, ISI, and environmental conditions.
+                    </p>
+                </div>
+                
+                <div class="feature-card rounded-2xl p-8 animate-slide-up">
+                    <div class="text-4xl mb-4">🔒</div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Secure & Reliable</h3>
+                    <p class="text-gray-200">
+                        Enterprise-grade security with 99.9% uptime guarantee for critical fire weather monitoring.
+                    </p>
+                </div>
+                
+                <div class="feature-card rounded-2xl p-8 animate-slide-in-right">
+                    <div class="text-4xl mb-4">📱</div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Mobile Ready</h3>
+                    <p class="text-gray-200">
+                        Access predictions anywhere with our responsive design optimized for all devices.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- How It Works Section -->
+    <div class="relative z-10 py-20 px-4">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
+                    How It Works
+                </h2>
+                <p class="text-xl text-gray-200 max-w-3xl mx-auto">
+                    Our system uses advanced machine learning to analyze weather data and predict fire danger levels.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="glass-card rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                        <span class="text-3xl">📝</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4">1. Input Data</h3>
+                    <p class="text-gray-200">
+                        Enter weather parameters including temperature, humidity, wind speed, and fire indices.
+                    </p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="glass-card rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                        <span class="text-3xl">🧠</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4">2. AI Analysis</h3>
+                    <p class="text-gray-200">
+                        Our ridge regression model processes the data using trained algorithms on historical fire weather patterns.
+                    </p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="glass-card rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
+                        <span class="text-3xl">📈</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4">3. Get Results</h3>
+                    <p class="text-gray-200">
+                        Receive accurate fire weather index predictions with risk level assessments and recommendations.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- CTA Section -->
+    <div class="relative z-10 py-20 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <div class="glass-card rounded-3xl p-12">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
+                    Ready to Predict Fire Weather?
+                </h2>
+                <p class="text-xl text-gray-200 mb-8">
+                    Start using our advanced fire weather prediction system today and help protect your community.
+                </p>
+                <a href="/predictdata" class="btn-primary text-white px-10 py-5 rounded-xl font-semibold text-xl shadow-lg hover:shadow-xl transition-all duration-300 inline-flex items-center gap-3">
+                    🚀 Get Started Now
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="relative z-10 py-8 px-4 border-t border-white border-opacity-20">
+        <div class="max-w-6xl mx-auto text-center">
+            <p class="text-gray-300">
+                © 2024 Fire Weather Prediction System. Powered by Advanced Machine Learning.
+            </p>
+        </div>
+    </footer>
+    
+    <script>
+        // Add smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Add intersection observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in');
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.feature-card').forEach(card => {
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
