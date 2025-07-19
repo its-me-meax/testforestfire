@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fire Weather Prediction System</title>
     <style>
+        /* Your CSS styles remain the same... */
         * {
             margin: 0;
             padding: 0;
@@ -396,7 +397,7 @@
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="Temperature">Temperature (°C)</label>
-                            <input type="number" id="Temperature" name="Temperature" step="0.1" placeholder="Enter temperature" required>
+                            <input type="number" id="Temprature" name="Temprature" step="0.1" placeholder="Enter temperature" required>
                         </div>
                         <div class="form-group">
                             <label for="RH">Relative Humidity (%)</label>
@@ -404,7 +405,7 @@
                         </div>
                         <div class="form-group">
                             <label for="WS">Wind Speed (km/h)</label>
-                            <input type="number" id="WS" name="WS" step="0.1" min="0" placeholder="Enter wind speed" required>
+                            <input type="number" id="Ws" name="Ws" step="0.1" min="0" placeholder="Enter wind speed" required>
                         </div>
                         <div class="form-group">
                             <label for="Rain">Rainfall (mm)</label>
@@ -426,16 +427,17 @@
                             <label for="Classes">Fire Classes</label>
                             <select id="Classes" name="Classes" required>
                                 <option value="">Select fire class</option>
-                                <option value="1">Class 1 - Very Low</option>
-                                <option value="2">Class 2 - Low</option>
-                                <option value="3">Class 3 - Moderate</option>
-                                <option value="4">Class 4 - High</option>
-                                <option value="5">Class 5 - Very High</option>
+                                <option value="0">Not Fire</option>
+                                <option value="1">Fire</option>
                             </select>
                         </div>
                         <div class="form-group full-width">
-                            <label for="Region">Region Code</label>
-                            <input type="number" id="Region" name="Region" step="1" placeholder="Enter region code" required>
+                            <label for="Region">Region</label>
+                            <select id="Region" name="Region" required>
+                                <option value="">Select Region</option>
+                                <option value="0">Sidi-Bel Abbes</option>
+                                <option value="1">Bejaia</option>
+                            </select>
                         </div>
                     </div>
                     <button type="submit" class="submit-btn">
@@ -446,99 +448,45 @@
 
             <div class="result-section">
                 <h2 class="section-title">📊 Prediction Results</h2>
-                <div id="resultContent" class="result-display">
-                    <div class="placeholder-content">
-                        <div style="font-size: 3rem; margin: 1rem 0;">🌡️</div>
-                        <p>Enter weather parameters and click predict to see the fire weather index and risk assessment.</p>
+                
+                {% if results is defined and results is not none %}
+
+                    <div id="resultContent" class="result-display">
+                        <div class="result-label">Predicted Fire Weather Index</div>
+                        <div class="result-value">{{ "%.2f"|format(results) }}</div>
+                        
+                        {% if results < 5 %}
+                            <div class="risk-indicator risk-low">Low Risk</div>
+                            <div class="result-description">Fire conditions are favorable with low risk.</div>
+                        {% elif results < 15 %}
+                            <div class="risk-indicator risk-medium">Medium Risk</div>
+                            <div class="result-description">Moderate fire conditions - exercise caution.</div>
+                        {% else %}
+                            <div class="risk-indicator risk-high">High Risk</div>
+                            <div class="result-description">High fire danger - extreme caution required.</div>
+                        {% endif %}
                     </div>
-                </div>
-                <div id="loading" class="loading">
-                    <div class="loading-spinner"></div>
-                    <p>Analyzing weather conditions...</p>
-                </div>
+
+                {% else %}
+                
+                    <div id="resultContent" class="result-display">
+                        <div class="placeholder-content">
+                            <div style="font-size: 3rem; margin: 1rem 0;">🌡️</div>
+                            <p>Enter weather parameters and click predict to see the fire weather index.</p>
+                        </div>
+                    </div>
+
+                {% endif %}
+                
             </div>
-        </div>
+            </div>
 
         <div class="info-cards">
-            <div class="info-card">
-                <h3>🔥 FFMC - Fine Fuel Moisture Code</h3>
-                <p>Represents moisture content of litter and fine fuels. Higher values indicate drier conditions and increased fire risk.</p>
             </div>
-            <div class="info-card">
-                <h3>🌿 DMC - Duff Moisture Code</h3>
-                <p>Indicates moisture content of loosely compacted organic layers. Important for fire intensity and spread.</p>
-            </div>
-            <div class="info-card">
-                <h3>⚡ ISI - Initial Spread Index</h3>
-                <p>Combines wind speed and FFMC to indicate expected rate of fire spread. Higher values mean faster spread.</p>
-            </div>
-            <div class="info-card">
-                <h3>🎯 Fire Weather Index</h3>
-                <p>Comprehensive measure combining all factors to assess overall fire danger. Used by firefighters and forest managers.</p>
-            </div>
-        </div>
     </div>
 
     <script>
-        document.getElementById('predictionForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Show loading
-            document.getElementById('resultContent').style.display = 'none';
-            document.getElementById('loading').style.display = 'block';
-            
-            // Simulate API call delay
-            setTimeout(() => {
-                // Hide loading
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('resultContent').style.display = 'block';
-                
-                // Get form values
-                const temperature = parseFloat(document.getElementById('Temperature').value);
-                const humidity = parseFloat(document.getElementById('RH').value);
-                const windSpeed = parseFloat(document.getElementById('WS').value);
-                const rainfall = parseFloat(document.getElementById('Rain').value);
-                const ffmc = parseFloat(document.getElementById('FFMC').value);
-                const dmc = parseFloat(document.getElementById('DMC').value);
-                const isi = parseFloat(document.getElementById('ISI').value);
-                const classes = parseFloat(document.getElementById('Classes').value);
-                
-                // Simple prediction simulation (replace with actual model result)
-                const prediction = Math.max(0, (ffmc * 0.3 + dmc * 0.2 + isi * 0.4 + temperature * 0.1 - humidity * 0.2 + windSpeed * 0.1) / 10);
-                
-                // Determine risk level
-                let riskLevel, riskClass, riskText;
-                if (prediction < 2) {
-                    riskLevel = 'Low';
-                    riskClass = 'risk-low';
-                    riskText = 'Fire conditions are favorable with low risk';
-                } else if (prediction < 4) {
-                    riskLevel = 'Medium';
-                    riskClass = 'risk-medium';
-                    riskText = 'Moderate fire conditions - exercise caution';
-                } else {
-                    riskLevel = 'High';
-                    riskClass = 'risk-high';
-                    riskText = 'High fire danger - extreme caution required';
-                }
-                
-                // Display results
-                document.getElementById('resultContent').innerHTML = `
-                    <div class="result-label">Fire Weather Index</div>
-                    <div class="result-value">${prediction.toFixed(2)}</div>
-                    <div class="risk-indicator ${riskClass}">
-                        ${riskLevel} Risk
-                    </div>
-                    <div class="result-description">${riskText}</div>
-                `;
-                
-                // Add animation
-                document.getElementById('resultContent').style.animation = 'fadeInUp 0.8s ease-out';
-                
-            }, 2000);
-        });
-
-        // Add input animations
+        // Add animations to input fields on focus/blur
         document.querySelectorAll('input, select').forEach(input => {
             input.addEventListener('focus', function() {
                 this.parentElement.style.transform = 'translateY(-2px)';
@@ -547,12 +495,6 @@
             input.addEventListener('blur', function() {
                 this.parentElement.style.transform = 'translateY(0)';
             });
-        });
-
-        // Add floating animation to cards
-        document.querySelectorAll('.info-card').forEach((card, index) => {
-            card.style.animationDelay = `${index * 0.2}s`;
-            card.style.animation = 'fadeInUp 1s ease-out forwards';
         });
     </script>
 </body>
